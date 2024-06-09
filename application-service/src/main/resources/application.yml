@@ -1,4 +1,6 @@
 grpc:
+  server:
+    port: 9090
   client:
     messaging-server-service:
       address: localhost
