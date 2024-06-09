@@ -1,0 +1,6 @@
+grpc:
+  client:
+    messaging-server-service:
+      address: localhost
+      port: 9090
+      negotiationType: plaintext
