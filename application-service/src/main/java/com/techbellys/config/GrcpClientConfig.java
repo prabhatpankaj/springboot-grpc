@@ -1,4 +1,4 @@
-package com.techbellys.clientservice.config;
+package com.techbellys.config;
 
 import com.techbellys.messaging.MessagingServiceGrpc;
 import io.grpc.ManagedChannel;

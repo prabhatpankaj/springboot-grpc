@@ -17,6 +17,7 @@
         <module>grpc-interface</module>
         <module>server-service</module>
         <module>client-service</module>
+        <module>application-service</module>
     </modules>
 
     <dependencies>
