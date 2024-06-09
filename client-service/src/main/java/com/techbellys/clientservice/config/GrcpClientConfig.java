@@ -25,7 +25,6 @@ public class GrcpClientConfig {
 		if ("plaintext".equalsIgnoreCase(negotiationType)) {
 			channelBuilder.usePlaintext();
 		}
-		System.out.println(address + port + "address, port");
 		return channelBuilder.build();
 	}
 

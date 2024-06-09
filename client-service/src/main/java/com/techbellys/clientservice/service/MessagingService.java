@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MessagingService {
 	private final MessagingServiceGrpc.MessagingServiceBlockingStub messagingServiceBlockingStub;
-	private final MessagingServiceGrpc.MessagingServiceStub messagingServiceStub;
 	private final MessageMapper messageMapper;
 	
 	public MessageClientResponse sendMessage(MessageClientRequest messageClientRequest) {
