@@ -1,8 +1,6 @@
 package com.techbellys.authenticationservice.config;
 
 import com.techbellys.authenticationservice.service.AuthUserService;
-import net.devh.boot.grpc.server.security.authentication.BasicGrpcAuthenticationReader;
-import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +32,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/store/**").permitAll()
                         .requestMatchers("/account").permitAll()
                         .requestMatchers("/account/login").permitAll()
                         .requestMatchers("/account/register").permitAll()
@@ -60,12 +57,6 @@ public class SecurityConfig {
         provider.setPasswordEncoder(new BCryptPasswordEncoder());
         return new ProviderManager(provider);
     }
-
-    @Bean
-    public GrpcAuthenticationReader grpcAuthenticationReader() {
-        return new BasicGrpcAuthenticationReader();
-    }
-
 
 
 }

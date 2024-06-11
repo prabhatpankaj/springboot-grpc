@@ -3,6 +3,7 @@ package com.techbellys.authenticationservice.controller;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.techbellys.authenticationservice.dto.LoginDto;
 import com.techbellys.authenticationservice.dto.RegisterDto;
+import com.techbellys.authenticationservice.dto.UserResponseDto;
 import com.techbellys.authenticationservice.model.AuthUser;
 import com.techbellys.authenticationservice.repository.AuthUserRepository;
 import jakarta.validation.Valid;
@@ -65,17 +66,7 @@ public class AuthController {
             }
             return ResponseEntity.badRequest().body(errorsMap);
         }
-
-        var bCryptEncoder = new BCryptPasswordEncoder();
-
-        AuthUser authUser = new AuthUser();
-        authUser.setFirstName(registerDto.getFirstName());
-        authUser.setLastName(registerDto.getLastName());
-        authUser.setUsername(registerDto.getUsername());
-        authUser.setEmail(registerDto.getEmail());
-        authUser.setRole("client");
-        authUser.setCreatedAt(new Date());
-        authUser.setPassword(bCryptEncoder.encode(registerDto.getPassword()));
+        AuthUser authUser = getAuthUser(registerDto);
 
         try {
             var otherUser = authUserRepository.findByUsername(registerDto.getUsername());
@@ -89,11 +80,15 @@ public class AuthController {
 
             authUserRepository.save(authUser);
 
+            AuthUser registerUser = authUserRepository.findByUsername(registerDto.getUsername());
+
             String jwtToken = createJwtToken(authUser);
+
+            UserResponseDto userResponseDto = getUserResponseDto(registerUser);
 
             var response = new HashMap<String, Object>();
             response.put("token", jwtToken);
-            response.put("user", authUser);
+            response.put("user", userResponseDto);
 
             return ResponseEntity.ok(response);
         }
@@ -102,6 +97,34 @@ public class AuthController {
         }
 
         return ResponseEntity.badRequest().body("Error");
+    }
+
+    private static AuthUser getAuthUser(RegisterDto registerDto) {
+        var bCryptEncoder = new BCryptPasswordEncoder();
+
+        AuthUser authUser = new AuthUser();
+        authUser.setFirstName(registerDto.getFirstName());
+        authUser.setLastName(registerDto.getLastName());
+        authUser.setUsername(registerDto.getUsername());
+        authUser.setEmail(registerDto.getEmail());
+        authUser.setPhone(registerDto.getPhone());
+        authUser.setAddress(registerDto.getAddress());
+        authUser.setRole("client");
+        authUser.setCreatedAt(new Date());
+        authUser.setPassword(bCryptEncoder.encode(registerDto.getPassword()));
+        return authUser;
+    }
+
+    private static UserResponseDto getUserResponseDto(AuthUser registerUser) {
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(registerUser.getId());
+        userResponseDto.setFirstName(registerUser.getFirstName());
+        userResponseDto.setLastName(registerUser.getLastName());
+        userResponseDto.setUsername(registerUser.getUsername());
+        userResponseDto.setEmail(registerUser.getEmail());
+        userResponseDto.setRole(registerUser.getRole());
+        userResponseDto.setCreatedAt(registerUser.getCreatedAt());
+        return userResponseDto;
     }
 
     @PostMapping("/login")
@@ -118,7 +141,6 @@ public class AuthController {
             return ResponseEntity.badRequest().body(errorsMap);
         }
 
-
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -127,10 +149,12 @@ public class AuthController {
                     )
             );
             AuthUser appUser = authUserRepository.findByUsername(loginDto.getUsername());
+
+            UserResponseDto userResponseDto = getUserResponseDto(appUser);
             String jwtToken = createJwtToken(appUser);
             var response = new HashMap<String, Object>();
             response.put("token", jwtToken);
-            response.put("user", appUser);
+            response.put("user", userResponseDto);
 
             return ResponseEntity.ok(response);
         }
