@@ -18,6 +18,7 @@
         <module>server-service</module>
         <module>client-service</module>
         <module>application-service</module>
+        <module>authentication-service</module>
     </modules>
 
     <dependencies>
