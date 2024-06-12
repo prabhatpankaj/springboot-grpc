@@ -4,19 +4,25 @@ import com.techbellys.clientservice.dto.OrderClientResponse;
 import com.techbellys.clientservice.service.OrderService;
 import com.techbellys.order.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/orders")
 @AllArgsConstructor
+@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
 
+    @PreAuthorize("hasAnyRole('client')")
     @PostMapping
-    public ResponseEntity<OrderClientResponse> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
+    public ResponseEntity<OrderClientResponse> createOrder(@RequestBody CreateOrderRequest createOrderRequest, Authentication auth) {
+        log.info(auth.toString());
         OrderClientResponse response = orderService.createOrder(createOrderRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
