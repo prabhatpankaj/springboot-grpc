@@ -6,3 +6,23 @@ grpc:
       address: localhost
       port: 9090
       negotiationType: plaintext
+spring:
+  datasource:
+    url: ${MYSQL_HOST:jdbc:mysql://localhost:3306/springboot-grpc}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  port: 8080
+
+security:
+  jwt:
+    secret-key: HNMFqqeuUIBk1eW8aUCRF0ejnPnQQekq
+    issuer: Springboot GRPC API

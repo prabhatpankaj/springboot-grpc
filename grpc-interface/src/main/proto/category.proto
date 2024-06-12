@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package com.techbellys.category;
+
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+message CreateCategoryRequest {
+  string name = 1;
+}
+
+message GetCategoryRequest {
+  string categoryId = 1;
+}
+
+message UpdateCategoryRequest {
+  string categoryId = 1;
+  string name = 2;
+}
+
+message DeleteCategoryRequest {
+  string categoryId = 1;
+}
+
+message CategoryResponse {
+  string categoryId = 1;
+  string name = 2;
+}
+
+message EmptyResponse {}
+
+service CategoryService {
+  rpc CreateCategory (CreateCategoryRequest) returns (CategoryResponse);
+  rpc GetCategory (GetCategoryRequest) returns (CategoryResponse);
+  rpc UpdateCategory (UpdateCategoryRequest) returns (CategoryResponse);
+  rpc DeleteCategory (DeleteCategoryRequest) returns (EmptyResponse);
+}

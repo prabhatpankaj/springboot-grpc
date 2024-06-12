@@ -36,3 +36,5 @@ build/
 
 ### DB DATA ###
 .data
+
+dbdata

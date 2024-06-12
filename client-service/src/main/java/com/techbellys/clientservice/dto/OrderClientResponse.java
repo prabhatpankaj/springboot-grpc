@@ -6,12 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class MessageClientRequest implements Serializable {
-	private String content;
-	private PersonClient sender;
+public class OrderClientResponse implements Serializable {
+    private String orderId;
+    private List<OrderItemClient> items;
 }
