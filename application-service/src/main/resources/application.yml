@@ -25,4 +25,4 @@ server:
 security:
   jwt:
     secret-key: HNMFqqeuUIBk1eW8aUCRF0ejnPnQQekq
-    issuer: Book Store API
+    issuer: Springboot GRPC API

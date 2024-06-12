@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package com.techbellys.order;
+
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+message CreateOrderRequest {
+  repeated OrderItem items = 1;
+}
+
+message OrderItem {
+  string productId = 1;
+  int32 quantity = 2;
+}
+
+message OrderResponse {
+  string orderId = 1;
+  repeated OrderItemResponse items = 2;
+}
+
+message OrderItemResponse {
+  string productId = 1;
+  int32 quantity = 2;
+}
+
+message GetOrderRequest {
+  string orderId = 1;
+}
+
+message UpdateOrderRequest {
+  string orderId = 1;
+  repeated OrderItem items = 2;
+}
+
+message DeleteOrderRequest {
+  string orderId = 1;
+}
+
+message EmptyResponse {}
+
+service OrderService {
+  rpc CreateOrder (CreateOrderRequest) returns (OrderResponse);
+  rpc GetOrder (GetOrderRequest) returns (OrderResponse);
+  rpc UpdateOrder (UpdateOrderRequest) returns (OrderResponse);
+  rpc DeleteOrder (DeleteOrderRequest) returns (EmptyResponse);
+}

@@ -1,6 +1,8 @@
 package com.techbellys.config;
 
-import com.techbellys.messaging.MessagingServiceGrpc;
+import com.techbellys.category.CategoryServiceGrpc;
+import com.techbellys.order.OrderServiceGrpc;
+import com.techbellys.product.ProductServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,12 +31,33 @@ public class GrcpClientConfig {
 	}
 
 	@Bean
-	public MessagingServiceGrpc.MessagingServiceBlockingStub messagingServiceBlockingStub(ManagedChannel channel) {
-		return MessagingServiceGrpc.newBlockingStub(channel);
+	public CategoryServiceGrpc.CategoryServiceBlockingStub categoryServiceBlockingStub(ManagedChannel channel) {
+		return CategoryServiceGrpc.newBlockingStub(channel);
 	}
 
 	@Bean
-	public MessagingServiceGrpc.MessagingServiceStub messagingServiceStub(ManagedChannel channel) {
-		return MessagingServiceGrpc.newStub(channel);
+	public CategoryServiceGrpc.CategoryServiceStub categoryServiceStub(ManagedChannel channel) {
+		return CategoryServiceGrpc.newStub(channel);
 	}
+
+	@Bean
+	public ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub(ManagedChannel channel) {
+		return ProductServiceGrpc.newBlockingStub(channel);
+	}
+
+	@Bean
+	public ProductServiceGrpc.ProductServiceStub productServiceStub(ManagedChannel channel) {
+		return ProductServiceGrpc.newStub(channel);
+	}
+
+	@Bean
+	public OrderServiceGrpc.OrderServiceBlockingStub orderServiceBlockingStub(ManagedChannel channel) {
+		return OrderServiceGrpc.newBlockingStub(channel);
+	}
+
+	@Bean
+	public OrderServiceGrpc.OrderServiceStub orderServiceStub(ManagedChannel channel) {
+		return OrderServiceGrpc.newStub(channel);
+	}
+
 }

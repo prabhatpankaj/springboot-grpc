@@ -1,6 +1,6 @@
 package com.techbellys.clientservice.dto;
 
-import com.techbellys.messaging.Gender;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Data
-public class PersonClient implements Serializable {
-	private String name;
-	private Integer age;
-	private Gender gender;
+public class CategoryClientResponse implements Serializable {
+    private String categoryId;
+    private String name;
 }

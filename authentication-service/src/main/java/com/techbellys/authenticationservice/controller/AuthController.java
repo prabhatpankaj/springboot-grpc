@@ -48,11 +48,13 @@ public class AuthController {
         var response = new HashMap<String, Object>();
         response.put("Username", auth.getName());
         response.put("Authorities", auth.getAuthorities());
-
         var authUser = authUserRepository.findByUsername(auth.getName());
-        response.put("User", authUser);
+        UserResponseDto userResponseDto = getUserResponseDto(authUser);
+        response.put("user", userResponseDto);
+
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/register")
     public ResponseEntity<Object> register(
             @Valid @RequestBody RegisterDto registerDto, BindingResult result) {
