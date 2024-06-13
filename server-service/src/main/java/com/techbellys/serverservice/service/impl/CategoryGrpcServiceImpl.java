@@ -3,26 +3,23 @@ package com.techbellys.serverservice.service.impl;
 import com.techbellys.category.*;
 import com.techbellys.serverservice.model.Category;
 import com.techbellys.serverservice.repository.CategoryRepository;
-import com.techbellys.serverservice.repository.ProductRepository;
 import com.techbellys.serverservice.service.CategoryService;
 import io.grpc.stub.StreamObserver;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @GrpcService
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryServiceImplBase {
-    @Autowired
-    private CategoryService categoryService;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
+
     @Override
     public void listCategories(ListCategoriesRequest request, StreamObserver<ListCategoriesResponse> responseObserver) {
         try {
@@ -89,4 +86,3 @@ public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryService
         responseObserver.onCompleted();
     }
 }
-

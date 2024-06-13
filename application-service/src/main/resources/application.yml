@@ -2,9 +2,25 @@ grpc:
   server:
     port: 9090
   client:
+    server-service:
+      address: 0.0.0.0
+      port: 9091
+      negotiationType: plaintext
     messaging-server-service:
       address: localhost
       port: 9090
+      negotiationType: plaintext
+    grpc-category-service:
+      address: 0.0.0.0
+      port: 6565
+      negotiationType: plaintext
+    grpc-product-service:
+      address: 0.0.0.0
+      port: 6566
+      negotiationType: plaintext
+    grpc-order-service:
+      address: 0.0.0.0
+      port: 6567
       negotiationType: plaintext
 spring:
   datasource:
