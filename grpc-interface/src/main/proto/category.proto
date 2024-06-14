@@ -30,9 +30,16 @@ message CategoryResponse {
 
 message EmptyResponse {}
 
+message ListCategoriesRequest {}
+
+message ListCategoriesResponse {
+  repeated CategoryResponse categories = 1;
+}
+
 service CategoryService {
   rpc CreateCategory (CreateCategoryRequest) returns (CategoryResponse);
   rpc GetCategory (GetCategoryRequest) returns (CategoryResponse);
   rpc UpdateCategory (UpdateCategoryRequest) returns (CategoryResponse);
   rpc DeleteCategory (DeleteCategoryRequest) returns (EmptyResponse);
+  rpc ListCategories (ListCategoriesRequest) returns (ListCategoriesResponse);
 }

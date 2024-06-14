@@ -2,10 +2,26 @@ grpc:
   server:
     port: 9090
   client:
-    messaging-server-service:
-      address: localhost
-      port: 9090
-      negotiationType: plaintext
+    CategoryService:
+      address: 'static://localhost:9090'
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      negotiation-type: plaintext
+    MessagingService:
+      address: 'static://localhost:9090'
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      negotiation-type: plaintext
+    OrderService:
+      address: 'static://localhost:9090'
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      negotiation-type: plaintext
+    ProductService:
+      address: 'static://localhost:9090'
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      negotiation-type: plaintext
 spring:
   datasource:
     url: ${MYSQL_HOST:jdbc:mysql://localhost:3306/springboot-grpc}

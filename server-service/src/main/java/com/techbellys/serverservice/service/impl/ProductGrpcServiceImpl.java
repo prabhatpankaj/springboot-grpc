@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @GrpcService
 @Slf4j
 @AllArgsConstructor
-class ProductGrpcServiceImpl extends ProductServiceGrpc.ProductServiceImplBase {
+public class ProductGrpcServiceImpl extends ProductServiceGrpc.ProductServiceImplBase {
 
     @Autowired
     private ProductService productService;

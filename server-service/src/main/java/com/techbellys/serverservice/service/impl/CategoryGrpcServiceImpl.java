@@ -2,20 +2,45 @@ package com.techbellys.serverservice.service.impl;
 
 import com.techbellys.category.*;
 import com.techbellys.serverservice.model.Category;
+import com.techbellys.serverservice.repository.CategoryRepository;
 import com.techbellys.serverservice.service.CategoryService;
 import io.grpc.stub.StreamObserver;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @GrpcService
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryServiceImplBase {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
+
+    @Override
+    public void listCategories(ListCategoriesRequest request, StreamObserver<ListCategoriesResponse> responseObserver) {
+        try {
+            List<Category> categories = categoryRepository.findAll();
+            List<CategoryResponse> categoryResponses = categories.stream()
+                    .map(category -> CategoryResponse.newBuilder()
+                            .setCategoryId(category.getId().toString())
+                            .setName(category.getName())
+                            .build())
+                    .collect(Collectors.toList());
+
+            ListCategoriesResponse response = ListCategoriesResponse.newBuilder()
+                    .addAllCategories(categoryResponses)
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
 
     @Override
     public void createCategory(CreateCategoryRequest request, StreamObserver<CategoryResponse> responseObserver) {
@@ -61,4 +86,3 @@ public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryService
         responseObserver.onCompleted();
     }
 }
-
