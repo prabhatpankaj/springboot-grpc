@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CategoryService {
 
-    @GrpcClient("grpc-category-service")
+    @GrpcClient("CategoryService")
     private CategoryServiceGrpc.CategoryServiceBlockingStub categoryServiceBlockingStub;
 
     private final CategoryMapper categoryMapper;

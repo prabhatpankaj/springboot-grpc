@@ -6,13 +6,17 @@ import com.techbellys.clientservice.dto.ProductClientResponse;
 import com.techbellys.product.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class ProductService {
-    private final ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub;
+
+    @GrpcClient("ProductService")
+    private ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub;
+
     private final ProductMapper productMapper;
 
     public ProductClientResponse createProduct(ProductClientRequest productClientRequest) {

@@ -17,19 +17,4 @@ public class ServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceApplication.class, args);
     }
-
-    @Bean
-    public CategoryGrpcServiceImpl categoryGrpcServiceImpl(CategoryService categoryService, CategoryRepository categoryRepository) {
-        return new CategoryGrpcServiceImpl(categoryService, categoryRepository);
-    }
-
-    @Bean
-    public ProductGrpcServiceImpl productGrpcServiceImpl(ProductService productService) {
-        return new ProductGrpcServiceImpl(productService);
-    }
-
-    @Bean
-    public OrderGrpcServiceImpl orderGrpcServiceImpl(OrderService orderService, ProductRepository productRepository) {
-        return new OrderGrpcServiceImpl(orderService, productRepository);
-    }
 }
