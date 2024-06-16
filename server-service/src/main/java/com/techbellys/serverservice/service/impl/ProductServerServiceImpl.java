@@ -5,13 +5,17 @@ import com.techbellys.serverservice.model.Product;
 import com.techbellys.serverservice.repository.CategoryRepository;
 import com.techbellys.serverservice.repository.ProductRepository;
 import com.techbellys.serverservice.service.ProductService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+@Slf4j
+@AllArgsConstructor
+public class ProductServerServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 

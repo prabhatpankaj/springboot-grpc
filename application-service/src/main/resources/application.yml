@@ -7,17 +7,22 @@ grpc:
       enable-keep-alive: true
       keep-alive-without-calls: true
       negotiation-type: plaintext
-    MessagingService:
-      address: 'static://localhost:9090'
-      enable-keep-alive: true
-      keep-alive-without-calls: true
-      negotiation-type: plaintext
     OrderService:
       address: 'static://localhost:9090'
       enable-keep-alive: true
       keep-alive-without-calls: true
       negotiation-type: plaintext
     ProductService:
+      address: 'static://localhost:9090'
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      negotiation-type: plaintext
+    CartService:
+      address: 'static://localhost:9090'
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      negotiation-type: plaintext
+    PaymentService:
       address: 'static://localhost:9090'
       enable-keep-alive: true
       keep-alive-without-calls: true

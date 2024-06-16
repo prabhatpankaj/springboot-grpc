@@ -3,7 +3,7 @@ package com.techbellys.serverservice.service.impl;
 import com.techbellys.category.*;
 import com.techbellys.serverservice.model.Category;
 import com.techbellys.serverservice.repository.CategoryRepository;
-import com.techbellys.serverservice.service.CategoryService;
+import com.techbellys.serverservice.service.CategoryServerService;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryServiceImplBase {
 
-    private final CategoryService categoryService;
+    private final CategoryServerService categoryServerService;
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -44,7 +44,7 @@ public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryService
 
     @Override
     public void createCategory(CreateCategoryRequest request, StreamObserver<CategoryResponse> responseObserver) {
-        Category category = categoryService.createCategory(request.getName());
+        Category category = categoryServerService.createCategory(request.getName());
         CategoryResponse response = CategoryResponse.newBuilder()
                 .setCategoryId(category.getId().toString())
                 .setName(category.getName())
@@ -55,7 +55,7 @@ public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryService
 
     @Override
     public void getCategory(GetCategoryRequest request, StreamObserver<CategoryResponse> responseObserver) {
-        Category category = categoryService.getCategoryById(Long.parseLong(request.getCategoryId()));
+        Category category = categoryServerService.getCategoryById(Long.parseLong(request.getCategoryId()));
         if (category != null) {
             CategoryResponse response = CategoryResponse.newBuilder()
                     .setCategoryId(category.getId().toString())
@@ -70,7 +70,7 @@ public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryService
 
     @Override
     public void updateCategory(UpdateCategoryRequest request, StreamObserver<CategoryResponse> responseObserver) {
-        Category category = categoryService.updateCategory(Long.parseLong(request.getCategoryId()), request.getName());
+        Category category = categoryServerService.updateCategory(Long.parseLong(request.getCategoryId()), request.getName());
         CategoryResponse response = CategoryResponse.newBuilder()
                 .setCategoryId(category.getId().toString())
                 .setName(category.getName())
@@ -81,7 +81,7 @@ public class CategoryGrpcServiceImpl extends CategoryServiceGrpc.CategoryService
 
     @Override
     public void deleteCategory(DeleteCategoryRequest request, StreamObserver<EmptyResponse> responseObserver) {
-        categoryService.deleteCategory(Long.parseLong(request.getCategoryId()));
+        categoryServerService.deleteCategory(Long.parseLong(request.getCategoryId()));
         responseObserver.onNext(EmptyResponse.newBuilder().build());
         responseObserver.onCompleted();
     }

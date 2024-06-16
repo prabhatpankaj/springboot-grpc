@@ -4,15 +4,18 @@ import com.techbellys.serverservice.model.Order;
 import com.techbellys.serverservice.model.OrderItem;
 import com.techbellys.serverservice.repository.OrderRepository;
 import com.techbellys.serverservice.repository.ProductRepository;
-import com.techbellys.serverservice.service.OrderService;
+import com.techbellys.serverservice.service.OrderServerService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+@Slf4j
+@AllArgsConstructor
+public class OrderServerServiceImpl implements OrderServerService {
 
     @Autowired
     private OrderRepository orderRepository;
