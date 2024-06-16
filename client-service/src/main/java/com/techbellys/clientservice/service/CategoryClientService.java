@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class CategoryService {
+public class CategoryClientService {
 
     @GrpcClient("CategoryService")
     private CategoryServiceGrpc.CategoryServiceBlockingStub categoryServiceBlockingStub;

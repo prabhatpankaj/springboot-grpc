@@ -5,7 +5,7 @@ import com.techbellys.serverservice.model.Order;
 import com.techbellys.serverservice.model.OrderItem;
 import com.techbellys.serverservice.model.Product;
 import com.techbellys.serverservice.repository.ProductRepository;
-import com.techbellys.serverservice.service.OrderService;
+import com.techbellys.serverservice.service.OrderServerService;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class OrderGrpcServiceImpl extends OrderServiceGrpc.OrderServiceImplBase {
 
     @Autowired
-    private OrderService orderService;
+    private OrderServerService orderService;
 
     @Autowired
     private ProductRepository productRepository;

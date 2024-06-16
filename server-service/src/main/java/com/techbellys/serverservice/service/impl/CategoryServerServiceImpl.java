@@ -2,13 +2,13 @@ package com.techbellys.serverservice.service.impl;
 
 import com.techbellys.serverservice.model.Category;
 import com.techbellys.serverservice.repository.CategoryRepository;
-import com.techbellys.serverservice.service.CategoryService;
+import com.techbellys.serverservice.service.CategoryServerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServerServiceImpl implements CategoryServerService {
 
     private final CategoryRepository categoryRepository;
 

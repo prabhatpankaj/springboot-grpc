@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package com.techbellys.payment;
+
+option java_multiple_files = true;
+
+message CreatePaymentRequest {
+  int64 userId = 1;
+  double amount = 2;
+  string method = 3;
+}
+
+message GetPaymentRequest {
+  string paymentId = 1;
+}
+
+message GetPaymentsByUserIdRequest {
+  int64 userId = 1;
+}
+
+message DeletePaymentRequest {
+  string paymentId = 1;
+}
+
+message PaymentResponse {
+  string paymentId = 1;
+  int64 userId = 2;
+  double amount = 3;
+  string method = 4;
+  string paymentDate = 5;
+}
+
+message PaymentsResponse {
+  repeated PaymentResponse payments = 1;
+}
+
+message EmptyResponse {}
+
+service PaymentService {
+  rpc CreatePayment (CreatePaymentRequest) returns (PaymentResponse);
+  rpc GetPayment (GetPaymentRequest) returns (PaymentResponse);
+  rpc GetPaymentsByUserId (GetPaymentsByUserIdRequest) returns (PaymentsResponse);
+  rpc DeletePayment (DeletePaymentRequest) returns (EmptyResponse);
+}

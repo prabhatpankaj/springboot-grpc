@@ -17,6 +17,6 @@ public class UserResponseDto {
     private String lastName;
     private String username;
     private String email;
-    private String role;
+    private String[] roles;
     private Date createdAt;
 }

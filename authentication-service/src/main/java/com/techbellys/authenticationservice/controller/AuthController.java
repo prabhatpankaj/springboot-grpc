@@ -5,7 +5,11 @@ import com.techbellys.authenticationservice.dto.LoginDto;
 import com.techbellys.authenticationservice.dto.RegisterDto;
 import com.techbellys.authenticationservice.dto.UserResponseDto;
 import com.techbellys.authenticationservice.model.AuthUser;
+import com.techbellys.authenticationservice.model.AuthUserAddress;
+import com.techbellys.authenticationservice.model.AuthUserRole;
 import com.techbellys.authenticationservice.repository.AuthUserRepository;
+import com.techbellys.authenticationservice.repository.AuthUserRoleRepository;
+import com.techbellys.authenticationservice.service.AuthUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +27,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/account")
@@ -38,13 +45,20 @@ public class AuthController {
     private String jwtIssuer;
 
     @Autowired
+    private AuthUserService authUserService;
+
+    @Autowired
     private AuthUserRepository authUserRepository;
+
+    @Autowired
+    private AuthUserRoleRepository authUserRoleRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @GetMapping("/profile")
     public ResponseEntity<Object> profile(Authentication auth) {
+        System.out.println(auth.getDetails()+ "--------------------------");
         var response = new HashMap<String, Object>();
         response.put("Username", auth.getName());
         response.put("Authorities", auth.getAuthorities());
@@ -93,15 +107,14 @@ public class AuthController {
             response.put("user", userResponseDto);
 
             return ResponseEntity.ok(response);
-        }
-        catch (Exception ex) {
-            System.out.println("There is an Exception while register");
+        } catch (Exception ex) {
+            System.out.println("There is an Exception while register: " + ex.getMessage());
         }
 
         return ResponseEntity.badRequest().body("Error");
     }
 
-    private static AuthUser getAuthUser(RegisterDto registerDto) {
+    private AuthUser getAuthUser(RegisterDto registerDto) {
         var bCryptEncoder = new BCryptPasswordEncoder();
 
         AuthUser authUser = new AuthUser();
@@ -111,20 +124,32 @@ public class AuthController {
         authUser.setEmail(registerDto.getEmail());
         authUser.setPhone(registerDto.getPhone());
         authUser.setAddress(registerDto.getAddress());
-        authUser.setRole("client");
         authUser.setCreatedAt(new Date());
         authUser.setPassword(bCryptEncoder.encode(registerDto.getPassword()));
+
+        Set<AuthUserRole> roles = new HashSet<>();
+        AuthUserRole defaultRole = authUserRoleRepository.findByName("USER");
+        if (defaultRole != null) {
+            roles.add(defaultRole);
+        } else {
+            AuthUserRole newRole = new AuthUserRole();
+            newRole.setName("USER");
+            authUserRoleRepository.save(newRole);
+            roles.add(newRole);
+        }
+        authUser.setAuthUserRoles(roles);
+
         return authUser;
     }
 
-    private static UserResponseDto getUserResponseDto(AuthUser registerUser) {
+    private UserResponseDto getUserResponseDto(AuthUser registerUser) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(registerUser.getId());
         userResponseDto.setFirstName(registerUser.getFirstName());
         userResponseDto.setLastName(registerUser.getLastName());
         userResponseDto.setUsername(registerUser.getUsername());
         userResponseDto.setEmail(registerUser.getEmail());
-        userResponseDto.setRole(registerUser.getRole());
+        userResponseDto.setRoles(registerUser.getAuthUserRoles().stream().map(AuthUserRole::getName).toArray(String[]::new));
         userResponseDto.setCreatedAt(registerUser.getCreatedAt());
         return userResponseDto;
     }
@@ -159,9 +184,8 @@ public class AuthController {
             response.put("user", userResponseDto);
 
             return ResponseEntity.ok(response);
-        }
-        catch (Exception ex) {
-            System.out.println("There is an Exception while register");
+        } catch (Exception ex) {
+            System.out.println("There is an Exception while login: " + ex.getMessage());
         }
 
         return ResponseEntity.badRequest().body("Wrong Username or Password");
@@ -175,7 +199,7 @@ public class AuthController {
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(24 * 3600))
                 .subject(authUser.getUsername())
-                .claim("role",authUser.getRole())
+                .claim("roles", authUser.getAuthUserRoles().stream().map(AuthUserRole::getName).toArray(String[]::new))
                 .build();
 
         var encoder = new NimbusJwtEncoder(
@@ -186,4 +210,25 @@ public class AuthController {
         return encoder.encode(params).getTokenValue();
     }
 
+    @PostMapping("/add-address")
+    public ResponseEntity<Object> addAddress(Authentication auth, @Valid @RequestBody AuthUserAddress address) {
+        var authUser = authUserRepository.findByUsername(auth.getName());
+        if (authUser == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        address.setUser(authUser);
+        authUserService.addAddressToUser(authUser.getId(), address);
+        return ResponseEntity.ok(address);
+    }
+
+    @DeleteMapping("/delete-address/{id}")
+    public ResponseEntity<Object> deleteAddress(@PathVariable Long id) {
+        try {
+            authUserService.deleteAddress(id);
+            return ResponseEntity.ok("Address deleted successfully");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error deleting address");
+        }
+    }
 }

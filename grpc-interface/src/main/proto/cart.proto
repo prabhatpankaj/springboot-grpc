@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package com.techbellys.cart;
+
+option java_multiple_files = true;
+
+message CreateCartRequest {
+  int64 userId = 1;
+}
+
+message GetCartRequest {
+  string cartId = 1;
+}
+
+message AddItemToCartRequest {
+  string cartId = 1;
+  int64 productId = 2;
+  int32 quantity = 3;
+}
+
+message UpdateCartItemRequest {
+  string cartId = 1;
+  string cartItemId = 2;
+  int32 quantity = 3;
+}
+
+message DeleteCartItemRequest {
+  string cartId = 1;
+  string cartItemId = 2;
+}
+
+message DeleteCartRequest {
+  string cartId = 1;
+}
+
+message CartItemResponse {
+  int64 productId = 1;
+  int32 quantity = 2;
+}
+
+message CartResponse {
+  string cartId = 1;
+  int64 userId = 2;
+  repeated CartItemResponse items = 3;
+}
+
+message EmptyResponse {}
+
+service CartService {
+  rpc CreateCart (CreateCartRequest) returns (CartResponse);
+  rpc GetCart (GetCartRequest) returns (CartResponse);
+  rpc AddItemToCart (AddItemToCartRequest) returns (CartResponse);
+  rpc UpdateCartItem (UpdateCartItemRequest) returns (CartResponse);
+  rpc DeleteCartItem (DeleteCartItemRequest) returns (EmptyResponse);
+  rpc DeleteCart (DeleteCartRequest) returns (EmptyResponse);
+}

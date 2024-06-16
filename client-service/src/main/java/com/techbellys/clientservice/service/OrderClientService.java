@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class OrderService {
+public class OrderClientService {
 
     @GrpcClient("orderService")
     private OrderServiceGrpc.OrderServiceBlockingStub orderServiceBlockingStub;
